@@ -20,12 +20,14 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor.white
         tableView.delegate = self
         tableView.dataSource = self
         
         let widht = view.frame.size.width
         let height = view.frame.size.height
         
+        tableView.backgroundColor = UIColor.white
         tableView.frame = CGRect(x: widht / 2 - widht * 0.9 / 2, y: height / 2 - height * 0.9 / 2, width: widht * 0.9, height: height * 0.9)
         view.addSubview(tableView)
         
@@ -77,6 +79,8 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.text = titleArray[indexPath.row]
+        cell.backgroundColor = UIColor.white
+        cell.textLabel?.textColor = UIColor.black
         return cell
     }
     
@@ -97,4 +101,40 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             destinationVC.selectedTitleId = choosenTitleId
         }
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appdelegate.persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Places")
+            let idString = idArray[indexPath.row].uuidString
+            fetchRequest.predicate = NSPredicate(format: "id = %@", idString)
+            fetchRequest.returnsObjectsAsFaults = false
+            
+            do{
+                let results = try context.fetch(fetchRequest)
+                
+                for result in results as! [NSManagedObject] {
+                    if let id = result.value(forKey: "id") as? UUID{
+                        context.delete(result)
+                        titleArray.remove(at: indexPath.row)
+                        idArray.remove(at: indexPath.row)
+                        self.tableView.reloadData()
+                        
+                        do{
+                            try context.save()
+                        }catch{
+                            
+                        }
+                        break
+                    }
+                }
+            }catch{
+                
+            }
+        }
+    }
+    
 }

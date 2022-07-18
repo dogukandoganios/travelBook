@@ -35,6 +35,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         width = view.frame.size.width
         height = view.frame.size.height
+        view.backgroundColor = UIColor.white
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
         if selectedTitle != ""{
             
@@ -90,12 +93,14 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         titleTextField.placeholder = "Title"
         titleTextField.textAlignment = .center
         titleTextField.layer.borderWidth = 1
+        titleTextField.backgroundColor = UIColor.white
         titleTextField.frame = CGRect(x: width * 0.5 - width * 0.5 / 2, y: height * 0.2 - height * 0.05 / 2, width: width * 0.5, height: height * 0.05)
         view.addSubview(titleTextField)
         
         commentTextField.placeholder = "Comment"
         commentTextField.textAlignment = .center
         commentTextField.layer.borderWidth = 1
+        commentTextField.backgroundColor = UIColor.white
         commentTextField.frame = CGRect(x: width * 0.5 - width * 0.5 / 2, y: height * 0.27 - height * 0.05 / 2, width: width * 0.5, height: height * 0.05)
         view.addSubview(commentTextField)
         
@@ -124,6 +129,12 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(chosenLocation(gestureRecognizer:)))
         gestureRecognizer.minimumPressDuration = 3
         mapView.addGestureRecognizer(gestureRecognizer)
+        
+    }
+    
+    @objc func dismissKeyboard(){
+        
+        view.endEditing(true)
         
     }
     
