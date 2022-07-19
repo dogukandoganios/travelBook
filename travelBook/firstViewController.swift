@@ -20,7 +20,6 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.white
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -37,7 +36,9 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         NotificationCenter.default.addObserver(self, selector: #selector(getData), name: NSNotification.Name("newPlace"), object: nil)
+        
     }
     
     @objc func getData(){
@@ -79,8 +80,21 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.text = titleArray[indexPath.row]
-        cell.backgroundColor = UIColor.white
-        cell.textLabel?.textColor = UIColor.black
+        
+        
+        let userInterfaceStlye = traitCollection.userInterfaceStyle
+        if userInterfaceStlye == .dark {
+            
+            cell.textLabel?.textColor = UIColor.white
+            self.tableView.backgroundColor = UIColor.black
+            
+        }else{
+            
+            cell.textLabel?.textColor = UIColor.black
+            self.tableView.backgroundColor = UIColor.white
+            
+        }
+        
         return cell
     }
     

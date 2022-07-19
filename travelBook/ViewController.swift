@@ -35,7 +35,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         width = view.frame.size.width
         height = view.frame.size.height
-        view.backgroundColor = UIColor.white
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
@@ -90,28 +89,23 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         }else{
         }
         
-        titleTextField.placeholder = "Title"
         titleTextField.textAlignment = .center
         titleTextField.layer.borderWidth = 1
-        titleTextField.backgroundColor = UIColor.white
         titleTextField.frame = CGRect(x: width * 0.5 - width * 0.5 / 2, y: height * 0.2 - height * 0.05 / 2, width: width * 0.5, height: height * 0.05)
         view.addSubview(titleTextField)
         
-        commentTextField.placeholder = "Comment"
         commentTextField.textAlignment = .center
         commentTextField.layer.borderWidth = 1
-        commentTextField.backgroundColor = UIColor.white
         commentTextField.frame = CGRect(x: width * 0.5 - width * 0.5 / 2, y: height * 0.27 - height * 0.05 / 2, width: width * 0.5, height: height * 0.05)
         view.addSubview(commentTextField)
         
         saveButton.setTitle("Save", for: UIControl.State.normal)
-        saveButton.setTitleColor(UIColor.black, for: UIControl.State.normal)
         saveButton.layer.borderWidth = 1
         saveButton.frame = CGRect(x: width * 0.5 - width * 0.5 / 2, y: height * 0.36 - height * 0.05, width: width * 0.5, height: height * 0.05)
+        
         view.addSubview(saveButton)
         
         saveButton.addTarget(self, action: #selector(saveClick), for: UIControl.Event.touchUpInside)
-        
         
         mapView.delegate = self
         mapView.frame = CGRect(x: width * 0.5 - width / 2, y: height * 0.7 - height * 0.5 / 2, width: width, height: height * 0.5)
@@ -129,6 +123,52 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(chosenLocation(gestureRecognizer:)))
         gestureRecognizer.minimumPressDuration = 3
         mapView.addGestureRecognizer(gestureRecognizer)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        let userInterfaceStyle = traitCollection.userInterfaceStyle
+        if userInterfaceStyle == .dark {
+            
+            let borderColor : UIColor = UIColor.white
+            
+            titleTextField.backgroundColor = UIColor.black
+            titleTextField.attributedPlaceholder = NSAttributedString(string: "Title", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            titleTextField.textColor = UIColor.white
+            titleTextField.layer.borderColor = borderColor.cgColor
+            
+            commentTextField.backgroundColor = UIColor.black
+            commentTextField.attributedPlaceholder = NSAttributedString(string: "Comment", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            commentTextField.textColor = UIColor.white
+            commentTextField.layer.borderColor = borderColor.cgColor
+            
+            saveButton.setTitleColor(UIColor.white, for: UIControl.State.normal)
+            saveButton.backgroundColor = UIColor.black
+            saveButton.layer.borderColor = borderColor.cgColor
+            
+            
+        }else{
+            
+            let borderColor : UIColor = UIColor.black
+            
+            titleTextField.backgroundColor = UIColor.white
+            titleTextField.attributedPlaceholder = NSAttributedString(string: "Title", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            titleTextField.textColor = UIColor.black
+            titleTextField.layer.borderColor = borderColor.cgColor
+            
+            commentTextField.backgroundColor = UIColor.white
+            commentTextField.attributedPlaceholder = NSAttributedString(string: "Comment", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            commentTextField.textColor = UIColor.black
+            commentTextField.layer.borderColor = borderColor.cgColor
+            
+            saveButton.setTitleColor(UIColor.black, for: UIControl.State.normal)
+            saveButton.backgroundColor = UIColor.white
+            saveButton.layer.borderColor = borderColor.cgColor
+            
+            
+            
+        }
         
     }
     
@@ -160,6 +200,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newPlace"), object: nil)
         navigationController?.popViewController(animated: true)
+        
+        UIButton.animate(withDuration: 0.1, animations: {
+            self.saveButton.backgroundColor = UIColor.red
+        })
     }
     
     @objc func chosenLocation(gestureRecognizer : UILongPressGestureRecognizer){
@@ -185,7 +229,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if selectedTitle == ""{
         let location = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
-        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let span = MKCoordinateSpan(latitudeDelta: 0.002, longitudeDelta: 0.002)
         let region = MKCoordinateRegion(center: location, span: span)
         mapView.setRegion(region, animated: true)
         }
