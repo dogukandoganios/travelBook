@@ -126,6 +126,49 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        
+        let userInterfaceStyle = traitCollection.userInterfaceStyle
+        if userInterfaceStyle == .dark {
+            
+            let borderColor : UIColor = UIColor.white
+            
+            titleTextField.backgroundColor = UIColor.black
+            titleTextField.attributedPlaceholder = NSAttributedString(string: "Title", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            titleTextField.textColor = UIColor.white
+            titleTextField.layer.borderColor = borderColor.cgColor
+            
+            commentTextField.backgroundColor = UIColor.black
+            commentTextField.attributedPlaceholder = NSAttributedString(string: "Comment", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            commentTextField.textColor = UIColor.white
+            commentTextField.layer.borderColor = borderColor.cgColor
+            
+            saveButton.setTitleColor(UIColor.white, for: UIControl.State.normal)
+            saveButton.backgroundColor = UIColor.black
+            saveButton.layer.borderColor = borderColor.cgColor
+            
+            
+        }else{
+            
+            let borderColor : UIColor = UIColor.black
+            
+            titleTextField.backgroundColor = UIColor.white
+            titleTextField.attributedPlaceholder = NSAttributedString(string: "Title", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            titleTextField.textColor = UIColor.black
+            titleTextField.layer.borderColor = borderColor.cgColor
+            
+            commentTextField.backgroundColor = UIColor.white
+            commentTextField.attributedPlaceholder = NSAttributedString(string: "Comment", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+            commentTextField.textColor = UIColor.black
+            commentTextField.layer.borderColor = borderColor.cgColor
+            
+            saveButton.setTitleColor(UIColor.black, for: UIControl.State.normal)
+            saveButton.backgroundColor = UIColor.white
+            saveButton.layer.borderColor = borderColor.cgColor
+            
+    }
+        
+    }
     override func viewWillAppear(_ animated: Bool) {
         
         let userInterfaceStyle = traitCollection.userInterfaceStyle

@@ -39,6 +39,17 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         NotificationCenter.default.addObserver(self, selector: #selector(getData), name: NSNotification.Name("newPlace"), object: nil)
         
+        let userInterfaceStlye = traitCollection.userInterfaceStyle
+        if userInterfaceStlye == .dark {
+            
+            self.tableView.backgroundColor = UIColor.black
+            
+        }else{
+            
+            self.tableView.backgroundColor = UIColor.white
+            
+        }
+        
     }
     
     @objc func getData(){
@@ -82,20 +93,24 @@ class firstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.textLabel?.text = titleArray[indexPath.row]
         
         
+        
+        
+        return cell
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        
         let userInterfaceStlye = traitCollection.userInterfaceStyle
         if userInterfaceStlye == .dark {
             
-            cell.textLabel?.textColor = UIColor.white
             self.tableView.backgroundColor = UIColor.black
             
         }else{
             
-            cell.textLabel?.textColor = UIColor.black
             self.tableView.backgroundColor = UIColor.white
             
         }
         
-        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
